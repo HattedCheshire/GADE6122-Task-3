@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create Gold class that inherits from the Item class 
+    class Gold : Item
+    {
+        //Create a way to generate random variables
+        protected Random random = new Random();
+        //Create a variable for the value of the gold 
+        private int goldamount;
+        //Create a public Accessor for the goldamount
+        public int GOLDAMOUNT
+        {
+            get { return goldamount; }
+            set { goldamount = value; }
+        }
+        //Create constructor for class Gold
+        public Gold(int x, int y) : base(x, y, '$')
+        {
+            //Generate a random value for the gold 
+            GOLDAMOUNT = random.Next(0, 6);
+        }
+
+        //Create an overridden ToString method
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
