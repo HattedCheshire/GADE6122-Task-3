@@ -1,0 +1,139 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create abstract Character class that inherits from the Tile class 
+    abstract class Character : Tile
+    {
+        //Create protected variables
+        protected int hp;
+        protected int maxhp;
+        protected int damage;
+        protected int goldpurse;
+        //Create public Accessors
+        public int HP
+        {
+            get { return hp; }
+            set { hp = value; }
+        }
+        public int GOLDPURSE
+        {
+            get { return goldpurse; }
+            set { goldpurse = value; }
+        }
+
+        //Create Tile array to store Character's vision
+        public Tile[] characterVision = new Tile[4];
+
+        //Create constructor for class Character
+        protected Character(int x, int y, char symbol, int startHP, int dmg) : base(x, y, symbol)
+        {
+            damage = dmg;
+            maxhp = startHP;
+            hp = maxhp;
+        }
+
+        //Create public enum for Movement
+        public enum MovementEnum
+        {
+            NoMovement,
+            Up,
+            Right,
+            Down,
+            Left,
+        }
+
+        //Create a method to deal with attacks
+        public virtual void Attack(Character target)
+        {
+            //Check to see if the attack's target is viable
+            if (CheckRange(target))
+            {
+                //Decrease target's hp
+                target.hp -= damage;
+            }
+        }
+
+        //Create a method to check if a character is dead
+        public bool IsDead()
+        {
+            if (hp <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Create a method to check to see if the attack's target is viable 
+        public virtual bool CheckRange(Character target)
+        {
+            //Check to see if the attack's target is in reach
+            if (DistanceTo(target) == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Create a method to check to see if the attack's target is in reach
+        private int DistanceTo(Character target)
+        {
+            //Calculate if the attack's target is in reach
+            int totalDist;
+            totalDist = (Math.Abs(target.y - y)) + Math.Abs((target.x - x));
+            return (totalDist);
+        }
+
+        //Create a method to move the Character
+        public void Move(MovementEnum move)
+        {
+            switch (move)
+            {                
+                case MovementEnum.NoMovement:
+                    //The character doesn't move
+                    break;
+                case MovementEnum.Up:
+                    //The character moves up
+                    this.y--;
+                    break;
+                case MovementEnum.Down:
+                    //The character moves down
+                    this.y++;
+                    break;
+                case MovementEnum.Left:
+                    //The character moves left
+                    this.x--;
+                    break;
+                case MovementEnum.Right:
+                    //The character moves right
+                    this.x++;
+                    break;
+            }
+        }
+
+        //Create a method to allow the Character to pickup an item
+        public void Pickup(Item i)
+        {            
+            //Loop through the itemarray
+            for (int i = 0; i < Map.itemarray.Length; i++)
+            {
+                //If an item is at the current spot of a hero, it is picked up
+                if (Map.itemarray[i].X == x && Map.itemarray[i].Y == y)
+                {
+                    //Remove the item from the tilearray at its previous coordinates
+                    Map.tilearray[Map.itemarray[i].X, Map.itemarray[i].Y] = emptytile;
+                    //Add the gold to the hero's goldpurse
+                    Map.hero.GOLDPURSE += Map.itemarray[i].Gold.GOLDAMOUNT;
+                    //Render the item null in the itemarray
+                    Map.itemarray[i] = null;
+                }
+            }
+        }
+        public abstract MovementEnum ReturnMove(MovementEnum move = 0);
+
+        //Create a method to override the ToString method
+        public abstract override string ToString();
+    }
+}
