@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create the abstract class Tile
+    abstract class Tile
+    {
+        //Create protected variables
+        protected int x;
+        protected int y;
+        protected char symbol;
+
+        //Create public Accessors
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
+        }
+
+        public char SYMBOL
+        {
+            get { return symbol; }
+            set { symbol = value; }
+        }
+
+        //Create constructor for class Tile
+        public Tile(int x, int y, char symbol)
+        {
+            this.x = x;
+            this.y = y;
+            this.symbol = symbol;
+
+        }
+
+        //Create public enum for TileType
+        public enum TileType
+        {
+            Hero,
+            Enemy,
+            Gold,
+            Weapon
+        }
+    }
+}
