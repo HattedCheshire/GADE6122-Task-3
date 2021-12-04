@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create EmptyTile class that inherits from the Tile class 
+    class EmptyTile : Tile
+    {
+        //Create constructor for class EmptyTile
+        public EmptyTile(int x, int y) : base(x, y, '.')
+        {
+
+        }
+
+    }
+}
