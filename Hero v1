@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create Hero class that inherits from the Character class 
+    class Hero : Character
+    {
+        //Create constructor for class Hero
+        public Hero(int x, int y, int startHP) : base(x, y, 'H', startHP, 2)
+        {
+        }
+
+        //Create an overridden ReturnMove method
+        public override MovementEnum ReturnMove(MovementEnum move)
+        {
+            switch (move)
+            {
+                case MovementEnum.NoMovement:
+                    //Character doesn't move
+                    return MovementEnum.NoMovement;
+                case MovementEnum.Up:
+                    //The Hero wants to move up
+                    //Check to see if the tile the Hero wants to move to is Empty or has Gold
+                    if (characterVision[0].GetType() == typeof(EmptyTile) || characterVision[0].GetType() == typeof(Gold))
+                    {
+                        //The Hero moves up
+                        return MovementEnum.Up;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Right:
+                    //The Hero wants to move right
+                    //Check to see if the tile the Hero wants to move to is Empty or has Gold
+                    if (characterVision[1].GetType() == typeof(EmptyTile) || characterVision[0].GetType() == typeof(Gold))
+                    {
+                        //The Hero moves right
+                        return MovementEnum.Right;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Down:
+                    //The Hero wants to move down
+                    //Check to see if the tile the Hero wants to move to is Empty or has Gold
+                    if (characterVision[2].GetType() == typeof(EmptyTile) || characterVision[0].GetType() == typeof(Gold))
+                    {
+                        //The Hero moves down
+                        return MovementEnum.Down;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Left:
+                    //The Hero wants to move left
+                    //Check to see if the tile the Hero wants to move to is Empty or has Gold
+                    if (characterVision[3].GetType() == typeof(EmptyTile) || characterVision[0].GetType() == typeof(Gold))
+                    {
+                        //The Hero moves left
+                        return MovementEnum.Left;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+            }
+            //Character doesn't move
+            return MovementEnum.NoMovement;
+        }
+
+        //Create a method to override the ToString method
+        public override string ToString()
+        {
+            //Create string playerstats to store string
+            string playerstats;
+            //Add Playerstats to string
+            playerstats = "Player stats:\n" + "HP: " + this.hp + "/" + this.maxhp + "\nDamage: " + this.damage + "\n [" + x + "," + y + "]" + "\nGold: " + this.GOLDPURSE;
+            return playerstats;
+        }
+    }
+}
