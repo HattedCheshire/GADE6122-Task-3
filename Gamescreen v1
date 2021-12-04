@@ -1,0 +1,178 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create the Windows Form class Gamescreen
+    public partial class Gamescreen : Form
+    {
+        //Create a new GameEngine
+        GameEngine gameEngine = new GameEngine();
+        //Create a constructor for Gamescreen
+        public Gamescreen()
+        {
+            InitializeComponent();
+        }
+
+        //Create a method to load the form
+        private void Gamescreen_Load(object sender, EventArgs e)
+        {
+            //Change the Map label to show the current game map
+            maplabel.Text = gameEngine.ToString();
+            //Change the Stat label to show the player's stats
+            statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            //Fill the Enemieslist combobox to show the current enemies
+            FillEnemiesList();
+        }
+
+        //Create a method to update the form
+        private void UpdateForm()
+        {
+            //Clear the Enemieslist combobox
+            Enemylistbox.Items.Clear();
+            //Fill the Enemieslist combobox to show the current enemies
+            FillEnemiesList();
+            //Change the Map label to show the current game map
+            maplabel.Text = gameEngine.ToString();
+            //Change the Stat label to show the player's stats
+            statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+        }
+
+        //Create a method to fill Enemieslist combobox to show the current enemies
+        private void FillEnemiesList()
+        {
+            //Loop through the enemiesarray
+            for (int i = 0; i < gameEngine.GAMEMAP.enemiesarray.Length; i++)
+            {
+                //If the enemy is NOT dead
+                if (!gameEngine.GAMEMAP.enemiesarray[i].IsDead())
+                {
+                    //Add the Enemy to the Enemieslist combobox
+                    Enemylistbox.Items.Add(gameEngine.GAMEMAP.enemiesarray[i].ToString());
+                }
+            }
+        }
+
+        //Create a method to allow the player to change the selection of the Enemieslist combobox
+        private void Enemylistbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Allow the player to attack the target
+            attackbutton.Enabled = true;
+        }
+
+        //Create a method to allow the player to move left
+        private void leftbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+            {
+                //Move the player
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move down
+        private void downbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+            {
+                //Move the player
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move right
+        private void rightbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+            {
+                //Move the player
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move up
+        private void upbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+            {
+                //Move the player
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to attack
+        private void attackbutton_Click(object sender, EventArgs e)
+        {
+            //The Hero attacks
+            gameEngine.GAMEMAP.hero.Attack(gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex]);
+            //Update the battle log
+            logbox.Text += "\n" + gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].ToString();
+            //The Enemies attack
+            gameEngine.EnemyAttacks();
+            //Update the Engine
+            gameEngine.UpdateEngine();
+            //Update the form
+            UpdateForm();
+
+            //Disable the attackbutton
+            attackbutton.Enabled = false;
+        }
+
+        private void savebutton_Click(object sender, EventArgs e)
+        {
+            gameEngine.Save();
+        }
+
+        private void loadbutton_Click(object sender, EventArgs e)
+        {
+            gameEngine.Load();
+        }
+    }
+}
