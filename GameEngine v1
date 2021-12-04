@@ -1,0 +1,233 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create class GameEngine
+    class GameEngine
+    {
+        //Create a way to generate random variables
+        protected Random random = new Random();
+
+        //Create a new Map
+        private Map gamemap = new Map(8, 15, 8, 15, 3, 4);
+        //Create a public Accessor for the new Map
+        public Map GAMEMAP
+        {
+            get { return gamemap; }
+        }
+
+        //Create a method to allow the player to move
+        public bool MovePlayer(Character.MovementEnum playerdirection)
+        {
+            //Create a switch statement to check which direction the player wants to move
+            switch (playerdirection)
+            {
+                case Character.MovementEnum.NoMovement:
+                    //If the player does not move, they must choose a different direction
+                    return false;
+                case Character.MovementEnum.Up:
+                    if (GAMEMAP.hero.ReturnMove(playerdirection) == Character.MovementEnum.Up)
+                    {
+                        //The player wants to move up
+                        //The space that the Hero left is now Empty
+                        GAMEMAP.EmptyPreviousHeroSpace();
+                        //Move the Hero up to a new space
+                        GAMEMAP.hero.Move(Character.MovementEnum.Up);
+                        //Check to see if their is an item at the place that the Hero moved to.
+                        GAMEMAP.GetItemAtPosition(GAMEMAP.hero.X, GAMEMAP.hero.Y);
+                        return true;
+                    }
+                    //If the player does not move, they must choose a different direction
+                    else return false;
+                case Character.MovementEnum.Right:
+                    if (GAMEMAP.hero.ReturnMove(playerdirection) == Character.MovementEnum.Right)
+                    {
+                        //The player wants to move right
+                        //The space that the Hero left is now Empty
+                        GAMEMAP.EmptyPreviousHeroSpace();
+                        //Move the Hero right to a new space
+                        GAMEMAP.hero.Move(Character.MovementEnum.Right);
+                        //Check to see if their is an item at the place that the Hero moved to.
+                        GAMEMAP.GetItemAtPosition(GAMEMAP.hero.X, GAMEMAP.hero.Y);
+                        return true;
+                    }
+                    //If the player does not move, they must choose a different direction
+                    else return false;
+                case Character.MovementEnum.Down:
+                    if (GAMEMAP.hero.ReturnMove(playerdirection) == Character.MovementEnum.Down)
+                    {
+                        //The player wants to move down
+                        //The space that the Hero left is now Empty
+                        GAMEMAP.EmptyPreviousHeroSpace();
+                        //Move the Hero down to a new space
+                        GAMEMAP.hero.Move(Character.MovementEnum.Down);
+                        //Check to see if their is an item at the place that the Hero moved to.
+                        GAMEMAP.GetItemAtPosition(GAMEMAP.hero.X, GAMEMAP.hero.Y);
+                        return true;
+                    }
+                    //If the player does not move, they must choose a different direction
+                    else return false;
+                case Character.MovementEnum.Left:
+                    if (GAMEMAP.hero.ReturnMove(playerdirection) == Character.MovementEnum.Left)
+                    {
+                        //The player wants to move left
+                        //The space that the Hero left is now Empty
+                        GAMEMAP.EmptyPreviousHeroSpace();
+                        //Move the Hero left to a new space
+                        GAMEMAP.hero.Move(Character.MovementEnum.Left);
+                        //Check to see if their is an item at the place that the Hero moved to.
+                        GAMEMAP.GetItemAtPosition(GAMEMAP.hero.X, GAMEMAP.hero.Y);
+                        return true;
+                    }
+                    //If the player does not move, they must choose a different direction
+                    else return false;
+            }
+            //If the player does not move, they must choose a different direction
+            return false;
+        }
+
+        //Create a method to allow the Enemies to move
+        public void Enemymovement()
+        {
+            //Cycle through the enemiesarray
+            for (int i = 0; i < GAMEMAP.enemiesarray.Length; i++)
+            {
+                //Randomly choose a direction for the Enemy to move
+                int enemymovement = random.Next(0, 5);
+                switch (enemymovement)
+                {
+                    case 1:
+                        //Move the enemy up
+                        MoveEnemies(Character.MovementEnum.Up);
+                        break;
+                    case 2:
+                        //Move the enemy down
+                        MoveEnemies(Character.MovementEnum.Down);
+                        break;
+                    case 3:
+                        //Move the enemy left
+                        MoveEnemies(Character.MovementEnum.Left);
+                        break;
+                    case 4:
+                        //Move the enemy right
+                        MoveEnemies(Character.MovementEnum.Right);
+                        break;
+                }
+            }
+        }
+
+        //Create a method to move the Enemies
+        public bool MoveEnemies(Character.MovementEnum enemydirection)
+        {
+            switch (enemydirection)
+            {
+                case Character.MovementEnum.NoMovement:
+                    //The Enemy doesn't move
+                    return false;
+                case Character.MovementEnum.Up:                    
+                    if (GAMEMAP.goblin.ReturnMove(enemydirection) == Character.MovementEnum.Up)
+                    {
+                        //The enemy wants to move up
+                        //The space that the enemy left is now Empty
+                        GAMEMAP.EmptyPreviousEnemySpace();
+                        //Move the Enemy up to a new space
+                        GAMEMAP.goblin.Move(Character.MovementEnum.Up);
+                        return true;
+                    }
+                    else return false;
+                case Character.MovementEnum.Right:
+                    if (GAMEMAP.goblin.ReturnMove(enemydirection) == Character.MovementEnum.Right)
+                    {
+                        //The enemy wants to move right
+                        //The space that the enemy left is now Empty
+                        GAMEMAP.EmptyPreviousEnemySpace();
+                        //Move the Enemy right to a new space
+                        GAMEMAP.goblin.Move(Character.MovementEnum.Right);
+                        return true;
+                    }
+                    else return false;
+                case Character.MovementEnum.Down:
+                    if (GAMEMAP.goblin.ReturnMove(enemydirection) == Character.MovementEnum.Down)
+                    {
+                        //The enemy wants to move down
+                        //The space that the enemy left is now Empty
+                        GAMEMAP.EmptyPreviousEnemySpace();
+                        //Move the Enemy down to a new space
+                        GAMEMAP.goblin.Move(Character.MovementEnum.Down);
+                        return true;
+                    }
+                    else return false;
+                case Character.MovementEnum.Left:
+                    if (GAMEMAP.goblin.ReturnMove(enemydirection) == Character.MovementEnum.Left)
+                    {
+                        //The enemy wants to move left
+                        //The space that the enemy left is now Empty
+                        GAMEMAP.EmptyPreviousEnemySpace();
+                        //Move the Enemy left to a new space
+                        GAMEMAP.goblin.Move(Character.MovementEnum.Left);
+                        return true;
+                    }
+                    else return false;
+            }
+            return false;            
+        }
+
+        //Create a method to allow the enemies to attack
+        public void EnemyAttacks()
+        {
+            //Loop through the enemiesarray
+            for (int i = 0; i < GAMEMAP.enemiesarray.Length; i++)
+            {
+                //Loop through the charactervisionarray
+                for (int j = 0; j < 4; j++)
+                {
+                    if (GAMEMAP.enemiesarray[i].characterVision[j].GetType() == typeof(Hero))
+                    {
+                        //Prioritise hitting the Hero
+                        //Attack the Hero
+                        GAMEMAP.enemiesarray[i].Attack(GAMEMAP.hero);
+                    }
+                    else if (GAMEMAP.enemiesarray[i].characterVision[j].GetType() == typeof(Goblin))
+                    {
+                        //Attack the Goblin
+                        GAMEMAP.enemiesarray[i].Attack(GAMEMAP.goblin);
+                    }
+                    else if (GAMEMAP.enemiesarray[i].characterVision[j].GetType() == typeof(Mage))
+                    {
+                        //Attack the Mage
+                        GAMEMAP.enemiesarray[i].Attack(GAMEMAP.mage);
+                    }
+                }                
+            }
+        }
+
+        //Create a method to update the variables of the GameEngine
+        public void UpdateEngine()
+        {
+            //Clear the dead characters
+            GAMEMAP.ClearGrunts();
+            //Update the Map
+            GAMEMAP.UpdateMap();
+        }
+
+        //Create a override of the ToString method
+        public override string ToString()
+        {
+            //Generate the current map
+            return GAMEMAP.GenerateMap();
+        }
+
+        //Create a method to save the current game
+        public void Save()
+        {
+            
+        }
+        //Create a method to load the saved game
+        public void Load()
+        {
+
+        }
+    }
+}
