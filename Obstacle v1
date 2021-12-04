@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create Obstacle class that inherits from the Tile class 
+    class Obstacle : Tile
+    {
+        //Create constructor for class Obstacle
+        public Obstacle(int x, int y) : base(x, y, 'X')
+        {
+
+        }
+    }
+}
