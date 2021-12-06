@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Question 2.3
+    //Create RangedWeapon class that inherits from the Weapon class 
+    class RangedWeapon : Weapon
+    {
+        //Create public enum for RangedWeapon types
+        public enum RangedWeapontypesenum
+        {
+            Rifle,
+            Longbow,
+        }
+
+        //Create a method to override the RANGE accessor
+        public override int RANGE 
+        { 
+            get => base.RANGE; 
+            set => base.RANGE = value; 
+        }
+
+        //Create constructor for class MeleeWeapon
+        public RangedWeapon(int x, int y, char symbol, Weapontypeenum weapon) : base(x, y, symbol)
+        {
+            //Determine whether the RangedWeapon is a Rifle or a Longbow
+            switch (weapon)
+            {
+                case Weapon.Weapontypeenum.Rifle:
+                    //Set the Parameters of the Rifle
+                    WEAPONTYPE = "Rifle";
+                    DURABLILITY = 3;
+                    RANGE = 3;
+                    DAMAGE = 5;
+                    COST = 7;
+                    break;
+                case Weapon.Weapontypeenum.Longbow:
+                    //Set the Parameters of the Longbow
+                    WEAPONTYPE = "Longbow";
+                    DURABLILITY = 4;
+                    RANGE = 2;
+                    DAMAGE = 4;
+                    COST = 6;
+                    break;
+            }
+        }
+
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
