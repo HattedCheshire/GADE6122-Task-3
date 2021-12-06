@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create abstract Enemy class that inherits from the Character class 
+    abstract class Enemy : Character
+    {
+        //Create a way to generate random variables
+        protected Random random = new Random();
+
+        //Create constructor for class Enemy
+        public Enemy(int x, int y, char symbol, int startHP, int dmg, int startgold) : base(x, y, symbol, startHP, dmg) 
+        {
+            GOLDPURSE = startgold;
+        }
+
+        //Create a method to override the ToString method
+        public override string ToString()
+        {
+            //Check to see if the Enemy is dead
+            if (IsDead())
+            {
+                //If the Enemy is dead, return their position and death
+                return (" at [" + x + ", " + y + "] is Dead.");
+            }
+            //Question 3.2
+            //If the Enemy is alive, return their position, damage and hp
+            else if (weapon == null)
+            {
+                return (" (" + this.hp + "/" + this.maxhp + ")at [" + x + ", " + y + "] (" + damage + " DMG)");
+            }
+            else
+            {
+                return (" (" + this.hp + "/" + this.maxhp + ")at [" + x + ", " + y + "] with " + weapon.WEAPONTYPE 
+                    + "\n(Durability " + weapon.DURABLILITY + " " + damage + " DMG)");
+            }
+        }
+    }
+}
