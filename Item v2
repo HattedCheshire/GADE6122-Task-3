@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create abstract Item class that inherits from the Tile class 
+    abstract class Item : Tile
+    {
+        //Create constructor for class Item
+        public Item(int x, int y, char symbol) : base(x, y, symbol)
+        {
+            this.symbol = symbol;
+        }
+        //Create public enum
+        public enum Itemtype
+        {
+            Gold,
+            Dagger,
+            Longsword,
+            Rifle,
+            Longbow,
+        }
+        public int GOLDAMOUNT 
+        { 
+            get; 
+            internal set; 
+        }
+        public Weapon WEAPON
+        {
+            get;
+            internal set;
+        }
+
+        //Create a method to override the ToString method
+        public abstract override string ToString();
+    }
+}
