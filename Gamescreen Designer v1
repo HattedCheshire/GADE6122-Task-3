@@ -1,0 +1,274 @@
+
+namespace GADE6122_Task_2_21757948
+{
+    partial class Gamescreen
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.maplabel = new System.Windows.Forms.Label();
+            this.logbox = new System.Windows.Forms.RichTextBox();
+            this.savebutton = new System.Windows.Forms.Button();
+            this.Enemylistbox = new System.Windows.Forms.ComboBox();
+            this.attackbutton = new System.Windows.Forms.Button();
+            this.statlabel = new System.Windows.Forms.Label();
+            this.upbutton = new System.Windows.Forms.Button();
+            this.downbutton = new System.Windows.Forms.Button();
+            this.rightbutton = new System.Windows.Forms.Button();
+            this.leftbutton = new System.Windows.Forms.Button();
+            this.loadbutton = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.Shopinvent = new System.Windows.Forms.ComboBox();
+            this.buybutton = new System.Windows.Forms.Button();
+            this.sellbutton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // maplabel
+            // 
+            this.maplabel.AutoSize = true;
+            this.maplabel.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.maplabel.Location = new System.Drawing.Point(10, 11);
+            this.maplabel.Name = "maplabel";
+            this.maplabel.Size = new System.Drawing.Size(54, 27);
+            this.maplabel.TabIndex = 0;
+            this.maplabel.Text = "Map";
+            // 
+            // logbox
+            // 
+            this.logbox.Location = new System.Drawing.Point(10, 318);
+            this.logbox.Name = "logbox";
+            this.logbox.ReadOnly = true;
+            this.logbox.Size = new System.Drawing.Size(207, 107);
+            this.logbox.TabIndex = 3;
+            this.logbox.Text = "Quest log:";
+            // 
+            // savebutton
+            // 
+            this.savebutton.Location = new System.Drawing.Point(725, 6);
+            this.savebutton.Name = "savebutton";
+            this.savebutton.Size = new System.Drawing.Size(56, 32);
+            this.savebutton.TabIndex = 9;
+            this.savebutton.Text = "Save";
+            this.savebutton.UseVisualStyleBackColor = true;
+            this.savebutton.Click += new System.EventHandler(this.savebutton_Click);
+            // 
+            // Enemylistbox
+            // 
+            this.Enemylistbox.FormattingEnabled = true;
+            this.Enemylistbox.Location = new System.Drawing.Point(279, 6);
+            this.Enemylistbox.Name = "Enemylistbox";
+            this.Enemylistbox.Size = new System.Drawing.Size(208, 28);
+            this.Enemylistbox.TabIndex = 1;
+            this.Enemylistbox.Text = "Choose Enemy";
+            this.Enemylistbox.SelectedIndexChanged += new System.EventHandler(this.Enemylistbox_SelectedIndexChanged);
+            // 
+            // attackbutton
+            // 
+            this.attackbutton.Location = new System.Drawing.Point(279, 318);
+            this.attackbutton.Name = "attackbutton";
+            this.attackbutton.Size = new System.Drawing.Size(164, 41);
+            this.attackbutton.TabIndex = 2;
+            this.attackbutton.Text = "Attack";
+            this.attackbutton.UseVisualStyleBackColor = true;
+            this.attackbutton.Click += new System.EventHandler(this.attackbutton_Click);
+            // 
+            // statlabel
+            // 
+            this.statlabel.AutoSize = true;
+            this.statlabel.Location = new System.Drawing.Point(531, 8);
+            this.statlabel.Name = "statlabel";
+            this.statlabel.Size = new System.Drawing.Size(84, 20);
+            this.statlabel.TabIndex = 4;
+            this.statlabel.Text = "player stats";
+            // 
+            // upbutton
+            // 
+            this.upbutton.Location = new System.Drawing.Point(600, 252);
+            this.upbutton.Name = "upbutton";
+            this.upbutton.Size = new System.Drawing.Size(63, 44);
+            this.upbutton.TabIndex = 5;
+            this.upbutton.Text = "^";
+            this.upbutton.UseVisualStyleBackColor = true;
+            this.upbutton.Click += new System.EventHandler(this.upbutton_Click);
+            // 
+            // downbutton
+            // 
+            this.downbutton.Location = new System.Drawing.Point(600, 336);
+            this.downbutton.Name = "downbutton";
+            this.downbutton.Size = new System.Drawing.Size(63, 44);
+            this.downbutton.TabIndex = 6;
+            this.downbutton.Text = "v";
+            this.downbutton.UseVisualStyleBackColor = true;
+            this.downbutton.Click += new System.EventHandler(this.downbutton_Click);
+            // 
+            // rightbutton
+            // 
+            this.rightbutton.Location = new System.Drawing.Point(669, 294);
+            this.rightbutton.Name = "rightbutton";
+            this.rightbutton.Size = new System.Drawing.Size(63, 44);
+            this.rightbutton.TabIndex = 7;
+            this.rightbutton.Text = ">";
+            this.rightbutton.UseVisualStyleBackColor = true;
+            this.rightbutton.Click += new System.EventHandler(this.rightbutton_Click);
+            // 
+            // leftbutton
+            // 
+            this.leftbutton.Location = new System.Drawing.Point(531, 294);
+            this.leftbutton.Name = "leftbutton";
+            this.leftbutton.Size = new System.Drawing.Size(63, 44);
+            this.leftbutton.TabIndex = 8;
+            this.leftbutton.Text = "<";
+            this.leftbutton.UseVisualStyleBackColor = true;
+            this.leftbutton.Click += new System.EventHandler(this.leftbutton_Click);
+            // 
+            // loadbutton
+            // 
+            this.loadbutton.Location = new System.Drawing.Point(725, 44);
+            this.loadbutton.Name = "loadbutton";
+            this.loadbutton.Size = new System.Drawing.Size(56, 32);
+            this.loadbutton.TabIndex = 10;
+            this.loadbutton.Text = "Load";
+            this.loadbutton.UseVisualStyleBackColor = true;
+            this.loadbutton.Click += new System.EventHandler(this.loadbutton_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.panel1.Controls.Add(this.maplabel);
+            this.panel1.Controls.Add(this.logbox);
+            this.panel1.Controls.Add(this.savebutton);
+            this.panel1.Controls.Add(this.loadbutton);
+            this.panel1.Controls.Add(this.leftbutton);
+            this.panel1.Controls.Add(this.rightbutton);
+            this.panel1.Controls.Add(this.downbutton);
+            this.panel1.Controls.Add(this.upbutton);
+            this.panel1.Controls.Add(this.statlabel);
+            this.panel1.Controls.Add(this.attackbutton);
+            this.panel1.Controls.Add(this.Enemylistbox);
+            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(791, 431);
+            this.panel1.TabIndex = 11;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.DarkRed;
+            this.panel2.Controls.Add(this.Shopinvent);
+            this.panel2.Controls.Add(this.buybutton);
+            this.panel2.Controls.Add(this.sellbutton);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Location = new System.Drawing.Point(836, 17);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(321, 419);
+            this.panel2.TabIndex = 12;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // Shopinvent
+            // 
+            this.Shopinvent.FormattingEnabled = true;
+            this.Shopinvent.Location = new System.Drawing.Point(16, 39);
+            this.Shopinvent.Name = "Shopinvent";
+            this.Shopinvent.Size = new System.Drawing.Size(208, 28);
+            this.Shopinvent.TabIndex = 11;
+            this.Shopinvent.Text = "Choose Weapon";
+            this.Shopinvent.SelectedIndexChanged += new System.EventHandler(this.Shopinvent_SelectedIndexChanged);
+            // 
+            // buybutton
+            // 
+            this.buybutton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buybutton.Location = new System.Drawing.Point(16, 369);
+            this.buybutton.Name = "buybutton";
+            this.buybutton.Size = new System.Drawing.Size(91, 38);
+            this.buybutton.TabIndex = 2;
+            this.buybutton.Text = "Buy";
+            this.buybutton.UseVisualStyleBackColor = true;
+            this.buybutton.Click += new System.EventHandler(this.buybutton_Click);
+            // 
+            // sellbutton
+            // 
+            this.sellbutton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.sellbutton.Location = new System.Drawing.Point(216, 369);
+            this.sellbutton.Name = "sellbutton";
+            this.sellbutton.Size = new System.Drawing.Size(91, 38);
+            this.sellbutton.TabIndex = 1;
+            this.sellbutton.Text = "Sell";
+            this.sellbutton.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(238, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(69, 31);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Shop";
+            // 
+            // Gamescreen
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1173, 450);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
+            this.Name = "Gamescreen";
+            this.Text = "Gamescreen";
+            this.Load += new System.EventHandler(this.Gamescreen_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Label maplabel;
+        private System.Windows.Forms.RichTextBox logbox;
+        private System.Windows.Forms.Button savebutton;
+        private System.Windows.Forms.ComboBox Enemylistbox;
+        private System.Windows.Forms.Button attackbutton;
+        private System.Windows.Forms.Label statlabel;
+        private System.Windows.Forms.Button upbutton;
+        private System.Windows.Forms.Button downbutton;
+        private System.Windows.Forms.Button rightbutton;
+        private System.Windows.Forms.Button leftbutton;
+        private System.Windows.Forms.Button loadbutton;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button buybutton;
+        private System.Windows.Forms.Button sellbutton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox Shopinvent;
+    }
+}
+
