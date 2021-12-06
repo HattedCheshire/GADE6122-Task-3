@@ -1,0 +1,290 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create the Windows Form class Gamescreen
+    public partial class Gamescreen : Form
+    {
+        //Create a new GameEngine
+        GameEngine gameEngine = new GameEngine();
+        //Create a constructor for Gamescreen
+        public Gamescreen()
+        {
+            InitializeComponent();
+        }
+
+        //Create a method to load the form
+        private void Gamescreen_Load(object sender, EventArgs e)
+        {
+            //Change the Map label to show the current game map
+            maplabel.Text = gameEngine.ToString();
+            //Change the Stat label to show the player's stats
+            statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            //Fill the Enemieslist combobox to show the current enemies
+            FillEnemiesList();
+        }
+
+        //Create a method to update the form
+        private void UpdateForm()
+        {
+            //Clear the Enemieslist combobox
+            Enemylistbox.Items.Clear();
+            //Fill the Enemieslist combobox to show the current enemies
+            FillEnemiesList();
+            //Change the Map label to show the current game map
+            maplabel.Text = gameEngine.ToString();
+            //Change the Stat label to show the player's stats
+            statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+        }
+
+        //Create a method to fill Enemieslist combobox to show the current enemies
+        private void FillEnemiesList()
+        {
+            //Loop through the enemiesarray
+            for (int i = 0; i < gameEngine.GAMEMAP.enemiesarray.Length; i++)
+            {
+                //If the enemy is NOT dead
+                if (!gameEngine.GAMEMAP.enemiesarray[i].IsDead())
+                {
+                    //Add the Enemy to the Enemieslist combobox
+                    Enemylistbox.Items.Add(gameEngine.GAMEMAP.enemiesarray[i].ToString());
+                }
+            }
+        }
+        //Question 2.5
+        //Create a method to fill the shop list
+        public void Fillshop()
+        {
+            //Loop through the stock array
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    Shopinvent.Items.Add(gameEngine.shop.STOCK.ToString());
+                }
+            }
+        }
+        //Create a method to allow the player to change the selection of the Enemieslist combobox
+        private void Enemylistbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Allow the player to attack the target
+            attackbutton.Enabled = true;
+        }
+
+        //Create a method to allow the player to move left
+        private void leftbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+            {
+                //Move the player
+                gameEngine.GAMEMAP.hero.Move(Character.MovementEnum.Left);
+                //Pickup items
+                gameEngine.GAMEMAP.GetItemAtPosition(gameEngine.GAMEMAP.hero.X, gameEngine.GAMEMAP.hero.Y);
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move down
+        private void downbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+            {
+                //Move the player
+                gameEngine.GAMEMAP.hero.Move(Character.MovementEnum.Down);
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move right
+        private void rightbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+            {
+                //Move the player
+                gameEngine.GAMEMAP.hero.Move(Character.MovementEnum.Right);
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to move up
+        private void upbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if this is a valid move
+            if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+            {
+                //Move the player
+                gameEngine.GAMEMAP.hero.Move(Character.MovementEnum.Up);
+                //Move the enemies
+                gameEngine.Enemymovement();
+                //The enemies attack
+                gameEngine.EnemyAttacks();
+                //Update the engine
+                gameEngine.UpdateEngine();
+                //Change the Map label to show the current game map
+                maplabel.Text = gameEngine.ToString();
+                //Change the Stat label to show the player's stats
+                statlabel.Text = gameEngine.GAMEMAP.hero.ToString();
+            }
+        }
+
+        //Create a method to allow the player to attack
+        private void attackbutton_Click(object sender, EventArgs e)
+        {
+            //The Hero attacks
+            gameEngine.GAMEMAP.hero.Attack(gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex]);
+            //Update the battle log
+            logbox.Text += "\n" + gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].ToString();
+            //Question 3.4
+            //Loot the body
+            if (gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].IsDead() == true)
+            {
+                //Find the enemy in the enemy array index
+                for (int i = 0; i < gameEngine.GAMEMAP.enemiesarray.Length; i++)
+                {
+                    if (gameEngine.GAMEMAP.enemiesarray[i].X == gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].X && gameEngine.GAMEMAP.enemiesarray[i].Y == gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].Y)
+                    {
+                        int enemyindex = i;
+                        gameEngine.GAMEMAP.hero.Loot(enemyindex);
+                        if (gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].WEAPON == null)
+                        {
+                            //Update the battle log
+                            logbox.Text += "\nHero Looted " + gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].GOLDPURSE
+                                + " Gold and a " + gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].WEAPON.WEAPONTYPE;
+                        }
+                        else
+                        {
+                            //Update the battle log
+                            logbox.Text += "\nHero Looted " + gameEngine.GAMEMAP.enemiesarray[Enemylistbox.SelectedIndex].GOLDPURSE
+                                + " Gold";
+                        }                        
+                    }
+                }
+            }            
+            //The Enemies attack
+            gameEngine.EnemyAttacks();
+            //Update the Engine
+            gameEngine.UpdateEngine();
+            //Update the form
+            UpdateForm();
+
+            //Disable the attackbutton
+            attackbutton.Enabled = false;
+        }
+        //Create a method to allow you to save a game
+        private void savebutton_Click(object sender, EventArgs e)
+        {
+            gameEngine.Save();
+        }
+        //Create a method to allow you to load a saved game
+        private void loadbutton_Click(object sender, EventArgs e)
+        {
+            gameEngine.Load();
+        }
+        //Create a method to check if the selected weapon is able to be purchased
+        private void Shopinvent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Find the weapon in the shop stock array index
+            for (int i = 0; i < 3; i++)
+            {
+                if (gameEngine.shop.STOCK[i].ToString() == Shopinvent.Items[Shopinvent.SelectedIndex].ToString())
+                {
+                    //Check to see if the character has enough gold
+                    if (gameEngine.shop.CanBuy(i) == true)
+                    {
+                        //Enable the buy button
+                        buybutton.Enabled = true;
+                    }
+                    else
+                    {
+                        //Disable the buy button
+                        buybutton.Enabled = false;
+                    }
+                }
+            }
+        }
+
+        //Create a button to allow the player to purchase weapons
+        private void buybutton_Click(object sender, EventArgs e)
+        {
+            //Find the weapon in the shop stock array index
+            for (int i = 0; i < 3; i++)
+            {
+                if (gameEngine.shop.STOCK[i].ToString() == Shopinvent.Items[Shopinvent.SelectedIndex].ToString())
+                {
+                    //Check to see if the character has enough gold
+                    if (gameEngine.shop.CanBuy(i) == true)
+                    {
+                        //Allow the Character to buy the weapon
+                        gameEngine.shop.Buy(i);
+                    }
+                    else
+                    {
+                        //Disable the buy button
+                        buybutton.Enabled = false;
+                    }
+                }
+            }
+            
+        }
+        //Create a button to allow the player to sell their weapon
+        private void sellbutton_Click(object sender, EventArgs e)
+        {
+            //Check to see if the player has a weapon to sell
+            if (gameEngine.GAMEMAP.hero.WEAPON != null)
+            {
+                //Add the money to the customer's purse
+                gameEngine.GAMEMAP.hero.GOLDPURSE += gameEngine.GAMEMAP.hero.WEAPON.COST;
+                //Remove the weapon from the customer
+                gameEngine.GAMEMAP.hero.WEAPON = null;
+            }
+            else
+            {
+                sellbutton.Enabled = false;
+            }
+        }
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        
+    }
+}
