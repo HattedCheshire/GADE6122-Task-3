@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Question 2.1
+    //Create abstract Weapon class that inherits from the Item class 
+    abstract class Weapon : Item
+    {
+        //Create protected variables
+        protected int damage;
+        protected int range;
+        protected int durability;
+        protected int cost;
+        protected string weapontype;
+        //Create public Accessors
+        public int DAMAGE
+        {
+            get { return damage; }
+            set { damage = value; }
+        }
+        public virtual int RANGE
+        {
+            get { return range; }
+            set { range = value; }
+        }
+        public int DURABLILITY
+        {
+            get { return durability; }
+            set { durability = value; }
+        }
+        public int COST
+        {
+            get { return cost; }
+            set { cost = value; }
+        }
+        public string WEAPONTYPE
+        {
+            get { return weapontype; }
+            set { weapontype = value; }
+        }
+        //Create constructor for class Weapon
+        public Weapon(int x, int y, char symbol) : base(x, y, symbol)
+        {
+
+        }
+
+        //Create public enum for WEAPONTYPE
+        public enum Weapontypeenum
+        {
+            Dagger,
+            Longsword,
+            Rifle,
+            Longbow,
+        }
+    }
+}
