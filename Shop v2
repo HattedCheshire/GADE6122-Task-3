@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Question 2.5
+    //Create the class Shop
+    class Shop
+    {
+        //Create private variables
+        private Weapon[] stock = new Weapon[3];
+        private Random random = new Random();
+        private Character customer;
+        public Weapon cart;
+
+        public Weapon [] STOCK
+        {
+            get { return stock; }
+            set { stock = value; }
+        }
+        //Create constructor for class Shop
+        public Shop(Character customer)
+        {
+            stock = new Weapon[3];
+            for (int i = 0; i < 3; i++)
+            {
+                stock[i] = RandomWeapon();                
+            }
+        }
+
+        //Create a method to randomly generate a weapon
+        public Weapon RandomWeapon()
+        {
+            //Randomly generate a weapon type
+            int Weapontype = random.Next(1, 5);
+            if (Weapontype == 1)
+            {
+                //Create a Dagger
+                return new MeleeWeapon(-1, -1, 'D', Weapon.Weapontypeenum.Dagger);
+            }
+            else if (Weapontype == 2)
+            {
+                //Create a Longsword
+                return new MeleeWeapon(-1, -1, 'S', Weapon.Weapontypeenum.Longsword);
+            }
+            else if (Weapontype == 3)
+            {
+                //Create a Rifle
+                return new RangedWeapon(-1, -1, 'R', Weapon.Weapontypeenum.Rifle);
+            }
+            else
+            {
+                //Create a Rifle
+                return new RangedWeapon(-1, -1, 'B', Weapon.Weapontypeenum.Longbow);
+            }
+        }
+
+        //Check to see if the character can buy
+        public bool CanBuy(int num)
+        {
+            if (customer.GOLDPURSE > STOCK[num].COST)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Create a method to allow the character to buy from the shop
+        public void Buy(int num)
+        {
+            cart = STOCK[num];
+            //Deduct the gold from the Character's Purse
+            customer.GOLDPURSE -= cart.COST;
+            //Make the character pickup the weapon
+            if (cart.SYMBOL == 'D')
+            {
+                customer.Pickup(Item.Itemtype.Dagger);
+            }
+            else if (cart.SYMBOL == 'S')
+            {
+                customer.Pickup(Item.Itemtype.Longsword);
+            }
+            else if (cart.SYMBOL == 'R')
+            {
+                customer.Pickup(Item.Itemtype.Rifle);
+            }
+            else if (cart.SYMBOL == 'B')
+            {
+                customer.Pickup(Item.Itemtype.Longbow);
+            }
+            //Restock shop
+            stock = new Weapon[3];
+            for (int i = 0; i < 3; i++)
+            {
+                stock[i] = RandomWeapon();
+            }
+        }
+    
+        public string DisplayWeapon (int num)
+        {
+            return "Buy " + cart.WEAPONTYPE + " " + cart.COST + " Gold";
+        }
+    }
+}
