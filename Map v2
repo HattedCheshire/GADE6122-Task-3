@@ -1,0 +1,531 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create Map class
+    class Map
+    {
+        //Create a way to generate random variables
+        private Random random = new Random();
+
+        //Create private variables
+        private int height;
+        private int width;
+
+        //Create a Tile array to store the different classes on the map
+        public Tile[,] tilearray;
+        //Create a char array to store the char used to generate the onscreen map
+        private char[,] maparray;
+        //Create an Enemy arry to store the information of the enemies on the map
+        public Enemy[] enemiesarray;
+        //Create an Item arry to store the information of the items on the map
+        public Item[] itemarray;
+        //Create a variable to store the index of the picked up item
+        public int Itemindex;
+
+        //Create a new Character
+        public Character character;
+        //Create a new Enemy
+        public Enemy enemy;
+        //Create a new EmptyTile
+        public EmptyTile emptytile = new EmptyTile(0, 0);
+        //Create a new Obstacle
+        public Obstacle barrier = new Obstacle(0, 0);
+        //Create a new Goblin
+        public Goblin goblin = new Goblin(0, 0);
+        //Create a new Mage
+        public Mage mage = new Mage(0,0);
+        //Question 3.1
+        //Create a new Leader
+        public Leader leader = new Leader(0, 0);
+        //Create a new Hero
+        public Hero hero;
+        //Create a new Gold
+        public Gold gold;
+        //Create a new Weapon
+        public Weapon weapon;
+
+        //Create a public Accessor for the maparray
+        public char[,] MAPARRAY
+        {
+            get { return maparray; }
+            set { maparray = value; }
+        }
+
+        //Question 3.1
+        //Create constructor for class Map
+        public Map(int minheight, int maxheight, int minwidth, int maxwidth, int enemynum, int golddrops, int weapondrops)
+        {
+            //Randomise the height of the map
+            this.height = random.Next(minheight, maxheight);
+            //Randomise the width of the map
+            this.width = random.Next(minwidth, maxwidth);
+
+            //Create a new Tile array with the dimensions above
+            tilearray = new Tile[width, height];
+            //Clear the Tiles
+            Cleartiles();
+            //Create a border around the playable area
+            GenerateBorder();
+            //Create a new maparray with the dimensions above
+            maparray = new char[width, height];
+
+            //Create a new Enemy array. The length is determined above
+            enemiesarray = new Enemy[enemynum];
+            //Question 3.1
+            //Create a new Item array. The length is determined by combining the gold and weapon drops
+            int itemdrops = golddrops + weapondrops;
+            itemarray = new Item[itemdrops];
+
+            //Create a Hero
+            hero = (Hero)Create(Tile.TileType.Hero); 
+            //Place the Hero in the tilearray
+            tilearray[hero.X, hero.Y] = hero;
+
+            //Loop through the enemiesarray
+            for (int i = 0; i < enemiesarray.Length; i++)
+            {
+                //Create a Enemy
+                enemiesarray[i] = (Enemy)Create(Tile.TileType.Enemy);
+                //Place the Enemy in the tilearray
+                tilearray[enemiesarray[i].X, enemiesarray[i].Y] = enemiesarray[i];
+            }
+            //Loop through the itemarray
+            for (int j = 0; j < itemarray.Length; j++)
+            {
+                if (j < golddrops)
+                {
+                    //Create a Gold
+                    itemarray[j] = (Gold)Create(Tile.TileType.Gold);
+                    //Place the Item in the tilearray
+                    tilearray[itemarray[j].X, itemarray[j].Y] = itemarray[j];
+                }
+                else
+                {
+                    //Create a Item
+                    itemarray[j] = (Weapon)Create(Tile.TileType.Weapon);
+                    //Place the Item in the tilearray
+                    tilearray[itemarray[j].X, itemarray[j].Y] = itemarray[j];
+                }
+                
+            }
+            //Update all the Character's vision
+            UpdateVision();
+        }
+
+        //Create a method to update character's vision
+        public void UpdateVision()
+        {
+            //Loop through the Hero's charactervision array
+            for (int i = 0; i < 4; i++)
+            {                
+                switch (i)
+                {
+                    case 0: 
+                        //Add the Tile below the hero to the charactervision array
+                        hero.characterVision[i] = tilearray[hero.X, hero.Y - 1];
+                        break;
+                    case 1:
+                        //Add the Tile to the right of the hero to the charactervision array
+                        hero.characterVision[i] = tilearray[hero.X + 1, hero.Y];
+                        break;
+                    case 2:
+                        //Add the Tile above the hero to the charactervision array
+                        hero.characterVision[i] = tilearray[hero.X, hero.Y + 1];
+                        break;
+                    case 3:
+                        //Add the Tile to the left of the hero to the charactervision array
+                        hero.characterVision[i] = tilearray[hero.X - 1, hero.Y];
+                        break;
+                }
+            }
+            //Loop through the enemiesarray
+            for (int j = 0; j < enemiesarray.Length; j++)
+            {
+                //Loop through the Enemy's charactervision array
+                for (int k = 0; k < 4; k++)
+                {
+                    switch (k)
+                    {
+                        case 0:
+                            //Add the Tile below the enemy to the charactervision array
+                            enemiesarray[j].characterVision[k] = tilearray[enemiesarray[j].X, enemiesarray[j].Y - 1];
+                            break;
+                        case 1:
+                            //Add the Tile to the right of the enemy to the charactervision array
+                            enemiesarray[j].characterVision[k] = tilearray[enemiesarray[j].X + 1, enemiesarray[j].Y];
+                            break;
+                        case 2:
+                            //Add the Tile above the enemy to the charactervision array
+                            enemiesarray[j].characterVision[k] = tilearray[enemiesarray[j].X, enemiesarray[j].Y + 1];
+                            break;
+                        case 3:
+                            //Add the Tile to the left of the enemy to the charactervision array
+                            enemiesarray[j].characterVision[k] = tilearray[enemiesarray[j].X - 1, enemiesarray[j].Y];
+                            break;
+                    }
+                }
+            }
+        }
+
+        //Create a method that allows the program to create tile subclasses 
+        private Tile Create(Tile.TileType type)
+        {            
+            int x = 0;
+            int y = 0;
+            //Choose which type of class to create
+            switch (type)
+            {
+                case Tile.TileType.Hero:
+                    //The program wants to create a Hero class
+                    do
+                    {
+                        //Randomly generate x & y coordinates within the scope of the map
+                        x = random.Next(0, width);
+                        y = random.Next(0, height);
+                    } 
+                    //Make sure that the coordinates are empty
+                    while (SearchCoordinates(x, y));
+                    //Create the Hero
+                    return new Hero(x, y, 10);
+
+                case Tile.TileType.Enemy:
+                    //The program wants to create an Enemy class
+                    do
+                    {
+                        //Randomly generate x & y coordinates within the scope of the map
+                        x = random.Next(0, width);
+                        y = random.Next(0, height);
+                    }
+                    //Make sure that the coordinates are empty
+                    while (SearchCoordinates(x, y));
+                    //Randomly choose a number to correspond to which enemy type is chosen
+                    int enemytype = random.Next(1, 4);
+                    if (enemytype == 1)
+                    {
+                        //Create a Mage
+                        return new Mage(x, y);
+                    }
+                    //Question 3.1
+                    else if (enemytype == 2)
+                    {
+                        //Create a Leader
+                        return new Leader(x, y);
+                    }
+                    //Create a Goblin
+                    else return new Goblin(x, y);
+
+                //Question 3.1
+                case Tile.TileType.Weapon:
+                    //The program wants to create an Item class
+                    do
+                    {
+                        //Randomly generate x & y coordinates within the scope of the map
+                        x = random.Next(0, width);
+                        y = random.Next(0, height);
+                    }
+                    //Make sure that the coordinates are empty
+                    while (SearchCoordinates(x, y));
+                    int weapontype = random.Next(1, 5);
+                    if (weapontype == 1)
+                    {
+                        //Create a Dagger
+                        return new MeleeWeapon(-1, -1, 'D', Weapon.Weapontypeenum.Dagger);
+                    }
+                    else if (weapontype == 2)
+                    {
+                        //Create a Longsword
+                        return new MeleeWeapon(-1, -1, 'S', Weapon.Weapontypeenum.Longsword);
+                    }
+                    else if (weapontype == 3)
+                    {
+                        //Create a Rifle
+                        return new RangedWeapon(-1, -1, 'R', Weapon.Weapontypeenum.Rifle);
+                    }
+                    else
+                    {
+                        //Create a Rifle
+                        return new RangedWeapon(-1, -1, 'B', Weapon.Weapontypeenum.Longbow);
+                    }
+
+                case Tile.TileType.Gold:
+                    //The program wants to create an Item class
+                    do
+                    {
+                        //Randomly generate x & y coordinates within the scope of the map
+                        x = random.Next(0, width);
+                        y = random.Next(0, height);
+                    }
+                    //Make sure that the coordinates are empty
+                    while (SearchCoordinates(x, y));
+                    //Create Gold
+                    return new Gold(x, y);
+
+                default:
+                    //This is to deal with accidentaly using the Create method
+                    //Create a Hero outside of the scope of the map
+                    return new Hero(-1, -1, -1);
+            }
+        }
+
+        //Create a method to update the map
+        public void UpdateMap()
+        {
+            //Update character's vision
+            UpdateVision();
+            //Clear the tiles
+            Cleartiles();
+            //Generate the border surrounding the map
+            GenerateBorder();
+            //Place the hero in the map
+            tilearray[hero.X, hero.Y] = hero;
+            //Loop through the enemiesarray
+            for (int i = 0; i < enemiesarray.Length; i++)
+            {
+                //Place the enemy in the map
+                tilearray[enemiesarray[i].X, enemiesarray[i].Y] = enemiesarray[i]; 
+            }
+            //Loop through the itemsarray
+            for (int j = 0; j < itemarray.Length; j++)
+            {
+                //Place the item in the map
+                tilearray[itemarray[j].X, itemarray[j].Y] = itemarray[j];
+            }
+            //Generate the map
+            GenerateMap();
+        }
+        //Create a method to generate the map
+        public string GenerateMap()
+        {
+            //Loop through the tilearray coloumns
+            for (int y = 0; y < tilearray.GetLength(1); y++)
+            {
+                //Loop through the tilearray rows
+                for (int x = 0; x < tilearray.GetLength(0); x++)
+                {
+                    //Add the symbol of the class at this position in the maparray
+                    if (tilearray[x, y].GetType() == typeof(Hero))
+                    {
+                        //Add the Hero symbol
+                        maparray[x, y] = hero.SYMBOL;
+                    }
+                    else if (tilearray[x, y].GetType() == typeof(Goblin))
+                    {
+                        //Add the Goblin symbol
+                        maparray[x, y] = goblin.SYMBOL;
+                    }
+                    else if (tilearray[x, y].GetType() == typeof(Mage))
+                    {
+                        //Add the Mage symbol
+                        maparray[x, y] = mage.SYMBOL;
+                    }
+                    else if (tilearray[x, y].GetType() == typeof(Gold))
+                    {
+                        //Add the Gold symbol
+                        maparray[x, y] = '$';
+                    }
+                    else if (tilearray[x, y].GetType() == typeof(Obstacle))
+                    {
+                        //Add the Obstacle symbol
+                        maparray[x, y] = barrier.SYMBOL;
+                    }
+                    else
+                    {
+                        //Add the EmptyTile symbol
+                        maparray[x, y] = emptytile.SYMBOL;
+                    }
+                }
+            }
+
+            //Create a string to store the row of the map
+            string maprow = "";
+
+            //Loop through the maparray coloumns
+            for (int y = 0; y < maparray.GetLength(1); y++)
+            {
+                //Loop through the maparray rows
+                for (int x = 0; x < maparray.GetLength(0); x++)
+                {
+                    if (y == 0)
+                    {
+                        //Add the symbol to the string
+                        maprow += Convert.ToString(maparray[x, y]);
+                    }
+                    else
+                    {
+                        //Add the symbol to the string
+                        maprow += Convert.ToString(maparray[x, y]);
+                    }
+                }
+                //Add a new line to the string
+                maprow += "\n";
+            }
+            //Return the string to the UpdateMap method
+            return maprow;
+        }
+
+        //Create a method to generate a border around the map
+        private void GenerateBorder()
+        {
+            //Loop through the tilearray coloumns
+            for (int y = 0; y < tilearray.GetLength(1); y++)
+            {
+                //Loop through the tilearray rows
+                for (int x = 0; x < tilearray.GetLength(0); x++)
+                {                    
+                    if ((y == 0 || y == tilearray.GetLength(1) - 1) || (x == 0 || x == tilearray.GetLength(0) - 1))
+                    {
+                        //Add an Obstacle to the Map
+                        tilearray[x, y] = new Obstacle(x, y);
+                    }
+                }
+            }
+        }
+
+        //Create a method to check to see if a space is empty
+        private bool SearchCoordinates(int x, int y)
+        {
+            //Check to see if the space at the x & y coordinates is an EmptyTile
+            if (tilearray[x, y].GetType() != typeof(EmptyTile))
+            {
+                //Return the string to the Create Tile method
+                return true;
+            }
+            //Return the string to the Create Tile method
+            else return false;
+        }
+
+        //Create a method to remove the dead characters in the map
+        public void ClearGrunts()
+        {
+            //Loop through the enemiesarray
+            for (int i = 0; i < enemiesarray.Length; i++)
+            {
+                if (enemiesarray[i].IsDead())
+                {
+                    //Remove the enemy from the tilearray if they are dead
+                    tilearray[enemiesarray[i].X, enemiesarray[i].Y] = emptytile;
+                    //Render the enemy null in the enemiesarray
+                    enemiesarray[i] = null;
+                }
+            }
+            //Update the character's vision
+            UpdateVision();
+        }
+        
+        //Create a method to clear tiles
+        public void Cleartiles()
+        {
+            //Loop through the tilearray coloumns
+            for (int y = 0; y < tilearray.GetLength(1); y++)
+            {
+                //Loop through the tilearray rows
+                for (int x = 0; x < tilearray.GetLength(0); x++)
+                {
+                    //Create an EmptyTile at those x & y coordinates
+                    tilearray[x, y] = new EmptyTile(x, y);
+                }
+            }
+        }
+
+        //Create a method to empty the space that the hero previously occupied
+        public void EmptyPreviousHeroSpace()
+        {
+            //Remove the hero from the tilearray at its previous coordinates
+            tilearray[hero.X, hero.Y] = emptytile;
+            //Update the character's vision
+            UpdateVision();
+        }
+
+        //Create a method to empty the space that the enemy previously occupied
+        public void EmptyPreviousEnemySpace()
+        {
+            //Remove the goblin from the tilearray at its previous coordinates
+            tilearray[goblin.X, goblin.Y] = emptytile;
+            //Update the character's vision
+            UpdateVision();
+        }
+
+        //Create a method that allows the player to pickup an item
+        public Item GetItemAtPosition(int x, int y)
+        {
+            //Loop through the itemarray
+            for (int z = 0; z < itemarray.Length; z++)
+            {
+                //If an item is at the current spot of a hero, it is picked up
+                if (itemarray[z].X == character.X && itemarray[z].Y == character.Y)
+                {
+                    if (itemarray[z].SYMBOL == 'G')
+                    {
+                        //Log the index number of the item
+                        Itemindex = z;
+                        //Add the gold to the hero's goldpurse
+                        character.Pickup(Item.Itemtype.Gold);
+                        //Remove the item from the tilearray at its previous coordinates
+                        tilearray[itemarray[z].X, itemarray[z].Y] = emptytile;                        
+                        //Render the item null in the itemarray
+                        itemarray[z] = null;
+                    }
+                    //Question 3.2
+                    else if (itemarray[z].SYMBOL == 'D')
+                    {
+                        //Log the index number of the item
+                        Itemindex = z;
+                        //Add the weapon to the hero's inventory
+                        character.Pickup(Item.Itemtype.Dagger);
+                        //Remove the item from the tilearray at its previous coordinates
+                        tilearray[itemarray[z].X, itemarray[z].Y] = emptytile;                        
+                        //Render the item null in the itemarray
+                        itemarray[z] = null;
+                        //Equip the Weapon
+                        character.EquipWeapon(Weapon.Weapontypeenum.Dagger);
+                    }
+                    //Question 3.2
+                    else if (itemarray[z].SYMBOL == 'S')
+                    {
+                        //Log the index number of the item
+                        Itemindex = z;
+                        //Add the weapon to the hero's inventory
+                        character.Pickup(Item.Itemtype.Longsword);
+                        //Remove the item from the tilearray at its previous coordinates
+                        tilearray[itemarray[z].X, itemarray[z].Y] = emptytile;                        
+                        //Render the item null in the itemarray
+                        itemarray[z] = null;
+                        //Equip the Weapon
+                        character.EquipWeapon(Weapon.Weapontypeenum.Longsword);
+                    }
+                    //Question 3.2
+                    else if (itemarray[z].SYMBOL == 'R')
+                    {
+                        //Log the index number of the item
+                        Itemindex = z;
+                        //Add the weapon to the hero's inventory
+                        character.Pickup(Item.Itemtype.Rifle);
+                        //Remove the item from the tilearray at its previous coordinates
+                        tilearray[itemarray[z].X, itemarray[z].Y] = emptytile;                        
+                        //Render the item null in the itemarray
+                        itemarray[z] = null;
+                        //Equip the Weapon
+                        character.EquipWeapon(Weapon.Weapontypeenum.Rifle);
+                    }
+                    //Question 3.2
+                    else
+                    {
+                        //Log the index number of the item
+                        Itemindex = z;
+                        //Add the weapon to the hero's inventory
+                        character.Pickup(Item.Itemtype.Longbow);
+                        //Remove the item from the tilearray at its previous coordinates
+                        tilearray[itemarray[z].X, itemarray[z].Y] = emptytile;                        
+                        //Render the item null in the itemarray
+                        itemarray[z] = null;
+                        //Equip the Weapon
+                        character.EquipWeapon(Weapon.Weapontypeenum.Longbow);
+                    }
+                }
+            }
+        }
+    }
+}
