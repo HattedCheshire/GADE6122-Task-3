@@ -1,0 +1,323 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create abstract Character class that inherits from the Tile class 
+    abstract class Character : Tile
+    {
+        //Create protected variables
+        protected int hp;
+        protected int maxhp;
+        protected int damage;
+        //Question 3.2
+        protected int range;
+        protected int goldpurse;
+        protected Map gamemap;
+        public EmptyTile emptytile = new EmptyTile(0, 0);
+        //Question 3.2
+        protected Weapon weapon = null;
+        
+        //Create public Accessors
+        public int HP
+        {
+            get { return hp; }
+            set { hp = value; }
+        }
+        public int DAMAGE
+        {
+            get { return damage; }
+            set { damage = value; }
+        }
+        public int GOLDPURSE
+        {
+            get { return goldpurse; }
+            set { goldpurse = value; }
+        }
+        public Map GAMEMAP
+        {
+            get { return gamemap; }
+        }
+        //Question 3.2
+        public Weapon WEAPON
+        {
+            get { return weapon; }
+            set { weapon = value; }
+        }
+
+        public int RANGE
+        {
+            get { return range; }
+            set { range = value; }
+        }
+        //Create Tile array to store Character's vision
+        public Tile[] characterVision = new Tile[4];
+
+        //Create constructor for class Character
+        protected Character(int x, int y, char symbol, int startHP, int dmg) : base(x, y, symbol)
+        {
+            damage = dmg;
+            maxhp = startHP;
+            hp = maxhp;
+        }
+
+        //Create public enum for Movement
+        public enum MovementEnum
+        {
+            NoMovement,
+            Up,
+            Right,
+            Down,
+            Left,
+            Standstill,
+        }
+
+        //Create a method to deal with attacks
+        public virtual void Attack(Character target)
+        {
+            //Check to see if the attack's target is viable
+            if (CheckRange(target))
+            {
+                //Decrease target's hp
+                target.hp -= damage;
+                WEAPON.DURABLILITY -= 1;
+                if (WEAPON.DURABLILITY < 1)
+                {
+                    string attacker = this.GetType().Name;
+                    UnequipWeapon(attacker);
+                }
+            }
+        }
+
+        //Create a method to check if a character is dead
+        public bool IsDead()
+        {
+            if (hp <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Create a method to check to see if the attack's target is viable 
+        public virtual bool CheckRange(Character target)
+        {
+            //Check to see if the attack's target is in reach
+            if (DistanceTo(target) <= RANGE)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Create a method to check to see if the attack's target is in reach
+        private int DistanceTo(Character target)
+        {
+            //Calculate if the attack's target is in reach
+            int totalDist;
+            totalDist = (Math.Abs(target.y - y)) + Math.Abs((target.x - x));
+            return (totalDist);
+        }
+
+        //Create a method to move the Character
+        public void Move(MovementEnum move)
+        {
+            switch (move)
+            {                
+                case MovementEnum.NoMovement:
+                    //The character doesn't move
+                    break;
+                case MovementEnum.Up:
+                    //The character moves up
+                    this.y--;
+                    break;
+                case MovementEnum.Down:
+                    //The character moves down
+                    this.y++;
+                    break;
+                case MovementEnum.Left:
+                    //The character moves left
+                    this.x--;
+                    break;
+                case MovementEnum.Right:
+                    //The character moves right
+                    this.x++;
+                    break;
+            }
+        }
+
+        //Create a method to allow the Character to pickup an item
+        public void Pickup(Item.Itemtype type)
+        {
+            switch (type)
+            {
+                case Item.Itemtype.Gold:
+                    GOLDPURSE += gamemap.itemarray[gamemap.Itemindex].GOLDAMOUNT;
+                    break;
+                case Item.Itemtype.Dagger:
+                    
+                    break;
+                case Item.Itemtype.Longsword:
+                    
+                    break;
+                case Item.Itemtype.Rifle:
+                    
+                    break;
+                case Item.Itemtype.Longbow:
+                    
+                    break;
+            }
+            //Loop through the itemarray
+            for (int z = 0; z < GAMEMAP.itemarray.Length; z++)
+            {
+                //If an item is at the current spot of a hero, it is picked up
+                if (GAMEMAP.itemarray[z].X == X && GAMEMAP.itemarray[z].Y == Y)
+                {
+                    if (GAMEMAP.itemarray[z].SYMBOL == 'G')
+                    {
+                        //Remove the item from the tilearray at its previous coordinates
+                        GAMEMAP.tilearray[GAMEMAP.itemarray[z].X, GAMEMAP.itemarray[z].Y] = emptytile;
+                        //Add the gold to the hero's goldpurse
+                        GAMEMAP.character.GOLDPURSE += GAMEMAP.itemarray[z].GOLDAMOUNT;
+                        //Render the item null in the itemarray
+                        GAMEMAP.itemarray[z] = null;
+                    }
+                    //Question 3.2
+                    else if (GAMEMAP.itemarray[z].SYMBOL == 'D')
+                    {
+                        //Remove the item from the tilearray at its previous coordinates
+                        GAMEMAP.tilearray[GAMEMAP.itemarray[z].X, GAMEMAP.itemarray[z].Y] = emptytile;
+                        //Add the weapon to the hero's inventory
+                        GAMEMAP.character.WEAPON = GAMEMAP.itemarray[z].WEAPON;
+                        //Render the item null in the itemarray
+                        GAMEMAP.itemarray[z] = null;
+                        //Equip the Weapon
+                        EquipWeapon(Weapon.Weapontypeenum.Dagger);
+                    }
+                    //Question 3.2
+                    else if (GAMEMAP.itemarray[z].SYMBOL == 'S')
+                    {
+                        //Remove the item from the tilearray at its previous coordinates
+                        GAMEMAP.tilearray[GAMEMAP.itemarray[z].X, GAMEMAP.itemarray[z].Y] = emptytile;
+                        //Add the weapon to the hero's inventory
+                        GAMEMAP.character.WEAPON = GAMEMAP.itemarray[z].WEAPON;
+                        //Render the item null in the itemarray
+                        GAMEMAP.itemarray[z] = null;
+                        //Equip the Weapon
+                        EquipWeapon(Weapon.Weapontypeenum.Longsword);
+                    }
+                    //Question 3.2
+                    else if (GAMEMAP.itemarray[z].SYMBOL == 'R')
+                    {
+                        //Remove the item from the tilearray at its previous coordinates
+                        GAMEMAP.tilearray[GAMEMAP.itemarray[z].X, GAMEMAP.itemarray[z].Y] = emptytile;
+                        //Add the weapon to the hero's inventory
+                        GAMEMAP.character.WEAPON = GAMEMAP.itemarray[z].WEAPON;
+                        //Render the item null in the itemarray
+                        GAMEMAP.itemarray[z] = null;
+                        //Equip the Weapon
+                        EquipWeapon(Weapon.Weapontypeenum.Rifle);
+                    }
+                    //Question 3.2
+                    else if (GAMEMAP.itemarray[z].SYMBOL == 'B')
+                    {
+                        //Remove the item from the tilearray at its previous coordinates
+                        GAMEMAP.tilearray[GAMEMAP.itemarray[z].X, GAMEMAP.itemarray[z].Y] = emptytile;
+                        //Add the weapon to the hero's inventory
+                        GAMEMAP.character.WEAPON = GAMEMAP.itemarray[z].WEAPON;
+                        //Render the item null in the itemarray
+                        GAMEMAP.itemarray[z] = null;
+                        //Equip the Weapon
+                        EquipWeapon(Weapon.Weapontypeenum.Longbow);
+                    }
+
+                }
+            }
+        }
+
+        //Question 3.2
+        //Create a method to allow characters to equip weapons
+        public void EquipWeapon(Weapon.Weapontypeenum type)
+        {            
+            //Characters may only equip a weapon if they are unarmed
+            //Mages are not allowed to equip weapons
+            if (weapon != null && SYMBOL != 'M')
+            {
+                switch (type)
+                {
+                    //Equip Dagger
+                    case Weapon.Weapontypeenum.Dagger:
+                        damage = weapon.DAMAGE;
+                        RANGE = weapon.RANGE;
+                        break;
+                    //Equip Longsword
+                    case Weapon.Weapontypeenum.Longsword:
+                        damage = weapon.DAMAGE;
+                        RANGE = weapon.RANGE;
+                        break;
+                    //Equip Rifle
+                    case Weapon.Weapontypeenum.Rifle:
+                        damage = weapon.DAMAGE;
+                        RANGE = weapon.RANGE;
+                        break;
+                    //Equip Longbow
+                    case Weapon.Weapontypeenum.Longbow:
+                        damage = weapon.DAMAGE;
+                        RANGE = weapon.RANGE;
+                        break;
+                }
+            }
+            else return;
+        }
+        public void UnequipWeapon(string attacker)
+        {
+            if (weapon.DURABLILITY < 1)
+            {
+                switch (attacker)
+                {
+                    //Change Hero Damage and Range to bare handed
+                    case "Hero":
+                        WEAPON = null;
+                        damage = 2;
+                        RANGE = 1;
+                        break;
+                    //Change Leader Damage and Range to bare handed
+                    case "Leader":
+                        WEAPON = null;
+                        damage = 2;
+                        RANGE = 1;
+                        break;
+                    //Change Mage Damage and Range to bare handed
+                    case "Mage":
+                        WEAPON = null;
+                        damage = 5;
+                        RANGE = 1;
+                        break;
+                    //Change Goblin Damage and Range to bare handed
+                    case "Goblin":
+                        WEAPON = null;
+                        damage = 1;
+                        RANGE = 1;
+                        break;
+                }
+            }
+        }
+        //Question 3.4
+        public void Loot(int enemyindex)
+        {
+            //Add the dead enemies gold to the purse
+            GOLDPURSE += gamemap.enemiesarray[enemyindex].GOLDPURSE;
+            //If the deceased has a weapon and the killer, who is not a mage, does not, 
+            //The killer picks up the weapon
+            if (gamemap.enemiesarray[enemyindex].WEAPON != null && WEAPON == null && SYMBOL != 'M')
+            {
+                WEAPON = gamemap.enemiesarray[enemyindex].WEAPON;
+            }
+        }
+        public abstract MovementEnum ReturnMove(MovementEnum move = 0);
+
+        //Create a method to override the ToString method
+        public abstract override string ToString();
+    }
+}
