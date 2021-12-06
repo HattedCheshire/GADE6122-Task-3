@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Question 2.4 
+    //Create Leader class that inherits from the Enemy class 
+    class Leader : Enemy
+    {
+        //Create private Tile variable target
+        private Tile target;
+        //Create public Accessor
+        public Tile TARGET
+        {
+            get { return target; }
+            set { target = value; }
+        }
+        //Create constructor for class Leader
+        public Leader(int x, int y) : base(x, y, 'L', 10, 1, 2)
+        {
+            HP = 20;
+            DAMAGE = 2;
+            //Question 3.2
+            weapon = new MeleeWeapon(-1, -1, 'S', Weapon.Weapontypeenum.Longsword);
+            EquipWeapon(Weapon.Weapontypeenum.Longsword);
+        }
+
+        //Create an overridden ReturnMove method
+        public override MovementEnum ReturnMove(MovementEnum move)
+        {
+            switch (move)
+            {
+                case MovementEnum.NoMovement:
+                    //Character doesn't move
+                    return MovementEnum.NoMovement;
+                case MovementEnum.Up:
+                    //The Leader wants to move up
+                    //Check to see if the tile the Leader wants to move to is Empty
+                    if (characterVision[0].GetType() == typeof(EmptyTile))
+                    {
+                        //The Leader moves up
+                        return MovementEnum.Up;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Right:
+                    //The Leader wants to move right
+                    //Check to see if the tile the Leader wants to move to is Empty
+                    if (characterVision[1].GetType() == typeof(EmptyTile))
+                    {
+                        //The Leader moves right
+                        return MovementEnum.Right;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Down:
+                    //The Leader wants to move down
+                    //Check to see if the tile the Leader wants to move to is Empty
+                    if (characterVision[2].GetType() == typeof(EmptyTile))
+                    {
+                        //The Leader moves down
+                        return MovementEnum.Down;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+                case MovementEnum.Left:
+                    //The Leader wants to move left
+                    //Check to see if the tile the Leader wants to move to is Empty
+                    if (characterVision[3].GetType() == typeof(EmptyTile))
+                    {
+                        //The Leader moves left
+                        return MovementEnum.Left;
+                    }
+                    //Character doesn't move
+                    else return MovementEnum.NoMovement;
+            }
+            //Character doesn't move
+            return MovementEnum.NoMovement;
+        }
+
+        //Create an overridden ToString method to add Leader to the Enemy's stats
+        public override string ToString()
+        {
+            return "Leader" + base.ToString();
+        }
+    }
+}
