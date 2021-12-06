@@ -1,0 +1,137 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GADE6122_Task_2_21757948
+{
+    //Create Mage class that inherits from the Enemy class
+    class Mage : Enemy
+    {
+        //Create a new Map
+        public Map map;
+        public Character target;
+        //Create constructor for class Mage
+        public Mage(int x, int y) : base(x, y, 'M', 5, 5, 3)
+        {
+
+        }
+        //Create an overridden ReturnMove method
+        public override MovementEnum ReturnMove(MovementEnum move = MovementEnum.NoMovement)
+        {
+            return MovementEnum.NoMovement;           
+        }
+
+        //Create an overridden ToString method to add Mage to the Enemy's stats
+        public override string ToString()
+        {
+            return "Barehanged: Mage" + base.ToString();
+        }
+
+        //Create an overridden CheckRange method to account for the Mage's Attack
+        public override bool CheckRange(Character target)
+        {
+            //If any of the squares around the Mage contain a hero or goblin, they can attack
+            if (map.MAPARRAY[x + 1, y + 1] == 'G' || map.MAPARRAY[x + 1, y + 1] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x + 1, y] == 'G' || map.MAPARRAY[x + 1, y] == 'H')
+            {
+                return true;
+            }
+            else if(map.MAPARRAY[x + 1, y - 1] == 'G' || map.MAPARRAY[x + 1, y - 1] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x, y + 1] == 'G' || map.MAPARRAY[x, y + 1] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x, y - 1] == 'G' || map.MAPARRAY[x, y - 1] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x - 1, y + 1] == 'G' || map.MAPARRAY[x - 1, y + 1] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x - 1, y] == 'G' || map.MAPARRAY[x - 1, y] == 'H')
+            {
+                return true;
+            }
+            else if (map.MAPARRAY[x - 1, y - 1] == 'G' || map.MAPARRAY[x - 1, y - 1] == 'H')
+            {
+                return true;
+            }
+            else return false;           
+        }
+        //Create an overridden Attack method to account for the Mage's Attack
+        public override void Attack(Character target)
+        {
+            //Loop through the spaces around the mage
+            for (int i = 0; i < 8; i++)
+            {
+                switch (i)
+                {
+                    //Attack each of the spaces around the target
+                    case 0:
+                        if (map.tilearray[x + 1, y].GetType() == typeof(Hero) || map.tilearray[x + 1, y].GetType() == typeof(Goblin) || map.tilearray[x + 1, y].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x + 1, y].HP -= damage;
+                        }
+                        break;
+                    case 1:
+                        if (map.tilearray[x + 1, y + 1].GetType() == typeof(Hero) || map.tilearray[x + 1, y + 1].GetType() == typeof(Goblin) || map.tilearray[x + 1, y + 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x + 1, y + 1].HP -= damage;
+                        }
+                            break;
+                    case 2:
+                        if (map.tilearray[x + 1, y - 1].GetType() == typeof(Hero) || map.tilearray[x + 1, y - 1].GetType() == typeof(Goblin) || map.tilearray[x + 1, y - 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x + 1, y - 1].HP -= damage;
+                        }
+                        break;
+                    case 3:
+                        if (map.tilearray[x, y + 1].GetType() == typeof(Hero) || map.tilearray[x, y + 1].GetType() == typeof(Goblin) || map.tilearray[x, y + 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x, y + 1].HP -= damage;
+                        }
+                        break;
+                    case 4:
+                        if (map.tilearray[x, y - 1].GetType() == typeof(Hero) || map.tilearray[x, y - 1].GetType() == typeof(Goblin) || map.tilearray[x, y - 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x, y - 1].HP -= damage;
+                        }
+                        break;
+                    case 5:
+                        if (map.tilearray[x - 1, y].GetType() == typeof(Hero) || map.tilearray[x - 1, y].GetType() == typeof(Goblin) || map.tilearray[x - 1, y].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x - 1, y].HP -= damage;
+                        }
+                        break;
+                    case 6:
+                        if (map.tilearray[x - 1, y + 1].GetType() == typeof(Hero) || map.tilearray[x - 1, y + 1].GetType() == typeof(Goblin) || map.tilearray[x - 1, y + 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x - 1, y + 1].HP -= damage;
+                        }
+                        break;
+                    case 7:
+                        if (map.tilearray[x - 1, y - 1].GetType() == typeof(Hero) || map.tilearray[x - 1, y - 1].GetType() == typeof(Goblin) || map.tilearray[x - 1, y - 1].GetType() == typeof(Mage))
+                        {
+                            //Deal damage to the Character in this space
+                            map.tilearray[x - 1, y - 1].HP -= damage;
+                        }
+                        break;
+                }
+            }
+        }
+    }
+}
